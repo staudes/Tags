@@ -18,3 +18,4 @@ The config file will look like this:
 path1, path2, path3
 path to tags-base directory
 
+The programm should be able to run with cron
