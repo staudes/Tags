@@ -1,0 +1,20 @@
+Tags is a programm to automatically creaty symlinks from a central 'Tags' direcotry to marked directories.
+The directories are marked by adding a '.tags' file which specifies how the directory should be linked.
+A line in a .tags file has to contain the tag and can contain a name, seperated by a ",", which will be used as link name. 
+If no name is given the directory name will be used as link name
+
+A .tags file (in a directory "20181010_important") can look like this:
+ProjectX
+ProjectX/2018
+Data, 20181010_ProjectX_important
+
+in this case 3 links will be created
+the directories "ProjectX" and "Date" and the subdirectory "2018" will be created.
+additionally links from ProjectX/20181010_important, ProjectX/2018/20181010_important and Data/20181010_ProjectX_important to the
+target directory will be created.
+
+The programm is run with a config file, which specifies where to look and where to put the links.
+The config file will look like this:
+path1, path2, path3
+path to tags-base directory
+
