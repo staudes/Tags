@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 
 def find_tags(start_dir):
     """ returns paths to all .tags files beneath the given directory
@@ -11,17 +12,20 @@ def find_tags(start_dir):
                 yield p + '/.tags'
 
 def create_link(target, name):
+    print(target)
+    print(name)
     os.symlink(target, name)
 
 def parse_line(line):
     try:
         tag, name = line.split(',')
-        if not name.strip():
+        name = name.strip()
+        if not name:
             name = None
     except ValueError:
         tag = line
         name = None
-    return tag.split('/'), name
+    return tag.strip().split('/'), name
 
 def create_dirs(base_dir, dirs: list):
     base_path = os.path.abspath(base_dir)
@@ -42,11 +46,13 @@ def process_file(tags_file, base_dir):
             if name is None:
                 name = tags_file.rsplit('/.', 1)[0].rsplit('/', 1)[1]
             create_dirs(base_dir, dirs)
-            create_link(tags_file.rsplit('/', 1)[0], name)
+            create_link(tags_file.rsplit('/', 1)[0], os.path.join(*dirs, name))
 
-def process_file(conf):
+def run(conf):
     with open(conf, 'r') as f:
         path, tag_dir = f.read().strip().split('\n')
         for t in find_tags(path):
-            process_file(t)
+            process_file(t, tag_dir)
 
+if __name__ == '__main__':
+    run(sys.argv[1])
