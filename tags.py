@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 
 def find_tags(start_dir):
     """ returns paths to all .tags files beneath the given directory
@@ -12,9 +13,6 @@ def find_tags(start_dir):
                 yield p + '/.tags'
 
 def create_link(target, name):
-    print(os.getcwd())
-    print(target)
-    print(name)
     os.symlink(target, name)
 
 def parse_line(line):
@@ -53,6 +51,9 @@ def process_file(tags_file, base_dir):
 def run(conf):
     with open(conf, 'r') as f:
         path, tag_dir = f.read().strip().split('\n')
+        shutil.rmtree(tag_dir)
+        os.mkdir(tag_dir)
+        os.rmdir
         for t in find_tags(path):
             process_file(t, tag_dir)
 
