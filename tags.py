@@ -12,6 +12,7 @@ def find_tags(start_dir):
                 yield p + '/.tags'
 
 def create_link(target, name):
+    print(os.getcwd())
     print(target)
     print(name)
     os.symlink(target, name)
@@ -28,6 +29,7 @@ def parse_line(line):
     return tag.strip().split('/'), name
 
 def create_dirs(base_dir, dirs: list):
+    cwd = os.getcwd()
     base_path = os.path.abspath(base_dir)
     os.chdir(base_path)
     for d in dirs:
@@ -37,7 +39,7 @@ def create_dirs(base_dir, dirs: list):
         else:
             os.mkdir(d)
             os.chdir(d)
-    os.chdir(base_path)
+    os.chdir(cwd)
 
 def process_file(tags_file, base_dir):
     with open(tags_file, 'r') as f:
@@ -46,7 +48,7 @@ def process_file(tags_file, base_dir):
             if name is None:
                 name = tags_file.rsplit('/.', 1)[0].rsplit('/', 1)[1]
             create_dirs(base_dir, dirs)
-            create_link(tags_file.rsplit('/', 1)[0], os.path.join(*dirs, name))
+            create_link(os.path.abspath(tags_file.rsplit('/', 1)[0]), os.path.join(base_dir, *dirs, name))
 
 def run(conf):
     with open(conf, 'r') as f:
