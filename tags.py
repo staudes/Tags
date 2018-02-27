@@ -32,8 +32,10 @@ def create_dirs(base_dir, dirs: list):
     os.chdir(base_path)
     for d in dirs:
         if os.path.exists(d):
-            if not os.path.isdir(d) or os.path.islink(d):
+            if os.path.islink(d):
                 raise ValueError('Cannot create directory "{}". Path is blocked'.format(d))
+            if os.path.isdir(d):
+                os.chdir(d)
         else:
             os.mkdir(d)
             os.chdir(d)
