@@ -19,3 +19,18 @@ path1, path2, path3
 path to tags-base directory
 
 The programm should be able to run with cron
+
+
+My ideal tag structure
+Year/Month
+CS/XXX
+D4/C12/stability
+D4/C12/calibration
+D4/C12/ionic_strength
+D4/C12/response_time
+BO/OHBut/calibration
+Projects/BBraun
+Projects/PyrAT
+Papers/gerätepaper
+Papers/materialpaper
+
