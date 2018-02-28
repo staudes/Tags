@@ -32,8 +32,10 @@ def create_dirs(base_dir, dirs: list):
     os.chdir(base_path)
     for d in dirs:
         if os.path.exists(d):
-            if not os.path.isdir(d) or os.path.islink(d):
+            if os.path.islink(d):
                 raise ValueError('Cannot create directory "{}". Path is blocked'.format(d))
+            if os.path.isdir(d):
+                os.chdir(d)
         else:
             os.mkdir(d)
             os.chdir(d)
@@ -51,9 +53,15 @@ def process_file(tags_file, base_dir):
 def run(conf):
     with open(conf, 'r') as f:
         path, tag_dir = f.read().strip().split('\n')
-        shutil.rmtree(tag_dir)
+        try:
+            for p, d, files in os.walk(tag_dir):
+                for f in files:
+                    if not os.path.islink(f):
+                        raise ValueError('Tag directory not empty! Abort')
+            shutil.rmtree(tag_dir)
+        except FileNotFoundError:
+            pass
         os.mkdir(tag_dir)
-        os.rmdir
         for t in find_tags(path):
             process_file(t, tag_dir)
 
